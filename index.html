@@ -3,10 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyperspeed</title>
+    <title>Info</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            color: #ccc;
+        }
+
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: #000;
+        }
+
+        .speed-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(179, 0, 0, 0.8), transparent);
+            opacity: 0;
+            animation: zipLeft 1.5s linear infinite;
+        }
+
+        .speed-line-right {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(100, 0, 0, 0.8), transparent);
+            opacity: 0;
+            animation: zipRight 1.5s linear infinite;
+        }
+
+        .speed-line-vertical {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, rgba(179, 0, 0, 0.6), transparent);
+            opacity: 0;
+            animation: zipDown 2s linear infinite;
+        }
+
+        .speed-line-vertical-right {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, rgba(100, 0, 0, 0.6), transparent);
+            opacity: 0;
+            animation: zipUp 2s linear infinite;
+        }
+
+        @keyframes zipLeft {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes zipRight {
+            0% {
+                right: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                right: 100%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes zipDown {
+            0% {
+                top: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes zipUp {
+            0% {
+                bottom: -100%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+            }
+        }
+
+        .corner-accent {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 2px solid;
+            opacity: 0.15;
+        }
+
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-color: #b30000 transparent transparent #b30000;
+        }
+
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-color: transparent #800000 #800000 transparent;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(179, 0, 0, 0.3);
+            border-radius: 2px;
+            color: #999;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
+        }
+
+        .back-button:hover {
+            border-color: rgba(100, 0, 0, 0.4);
+            color: #ddd;
+            box-shadow: 0 0 20px rgba(179, 0, 0, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .info-section {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 2px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .info-section h2 {
+            color: #e60000;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .info-section h3 {
+            color: #cc0000;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #b30000;
+        }
+
+        .info-section code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 8px;
+            border-radius: 2px;
+            color: #ff3333;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 10px;
+        }
+
+        .status-badge.working {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .status-badge.broken {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .service-title {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(15, 15, 15, 0.8);
+            border: 1px solid rgba(179, 0, 0, 0.3);
+            border-radius: 2px;
+        }
+
+        .service-title h1 {
+            color: #ff0000;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .service-title p {
+            color: #aa0000;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px 15px 60px;
+            }
+
+            .info-section {
+                padding: 20px;
+            }
+
+            .info-section h2 {
+                font-size: 20px;
+            }
+
+            .info-section h3 {
+                font-size: 16px;
+            }
+            
+            .service-title h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="bg-container">
@@ -15,96 +322,143 @@
     </div>
 
     <div class="content">
-        <div class="logo">
-            <div class="logo-text">
-                <span class="hyper">Hyper</span><span class="speed">speed</span>
-            </div>
+        <div class="service-title">
+            <h1>Darrkon v12 (Beta)</h1>
+            <p>Advanced Proxy Service</p>
+        </div>
+        
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+
+        <div class="info-section">
+            <h2>Darrkon:</h2>
+            <p>
+                Darrkon is an amazing web proxy that acts as a leech for other wisp servers. 
+                While not the most reliable for support of lots of websites, the concept of a static
+                hosting proxy is great.
+            </p>
         </div>
 
-        <div class="search-container">
-            <form id="searchForm">
-                <div class="search-bar-wrapper">
-                    <svg width="100%" height="100%" style="position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px); pointer-events: none;">
-                        <defs>
-                            <linearGradient id="borderGradient" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" style="stop-color: #d856bf; stop-opacity: 0.6" />
-                                <stop offset="25%" style="stop-color: #aa52bb; stop-opacity: 0.6" />
-                                <stop offset="50%" style="stop-color: #03b3c3; stop-opacity: 0.6" />
-                                <stop offset="75%" style="stop-color: #aa52bb; stop-opacity: 0.6" />
-                                <stop offset="100%" style="stop-color: #d856bf; stop-opacity: 0.6" />
-                            </linearGradient>
-                            <filter id="glow">
-                                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                                <feMerge>
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                            <filter id="glowStrong">
-                                <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-                                <feMerge>
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
-                        <rect x="4" y="4" rx="2"
-                              fill="none" 
-                              stroke="url(#borderGradient)" 
-                              stroke-width="2.5" 
-                              filter="url(#glow)"
-                              pathLength="100"
-                              stroke-dasharray="100 0"
-                              stroke-dashoffset="0"
-                              style="animation: dashFlow 3s linear infinite; width: calc(100% - 8px); height: calc(100% - 8px); transition: all 0.3s ease;" />
-                    </svg>
-                    <input type="text" id="query" name="query" placeholder="Enter search term or URL..." required autofocus>
-                </div>
+        <div class="info-section">
+            <h2>Search Engines</h2>
+            <p>
+                Choose from multiple search engines to find what you're looking for:
+            </p>
+            <h3>DuckDuckGo</h3>
+            <h3>Google</h3>
+            <h3>Bing</h3>
+        </div>
 
-                <div class="options-container">
-                    <div class="option-group">
-                        <label for="browser">Search Engine</label>
-                        <div class="custom-select">
-                            <select id="browser" name="browser">
-                                <option value="duckduckgo">DuckDuckGo</option>
-                                <option value="google">Google</option>
-                                <option value="bing">Bing</option>
-                            </select>
-                        </div>
-                    </div>
+        <div class="info-section">
+            <h2>Proxy Backends</h2>
+            <p>
+                Darrkon supports multiple proxy backends to route your traffic:
+            </p>
+            <h3>Ultraviolet <span class="status-badge working">Working</span></h3>
+            <p>
+                A highly sophisticated proxy used for evading internet censorship. It's currently the recommended 
+                backend for optimal performance and compatibility.
+            </p>
+            <h3>ScramJet <span class="status-badge broken">Currently Broken</span></h3>
+            <p>
+                The most reliable proxy that supports lots of sites and web apps, and runs almost the entirety of the web. 
+                Unfortunately, ScramJet is down.
+            </p>
+        </div>
 
-                    <div class="option-group">
-                        <label for="proxy">Proxy Backend</label>
-                        <div class="custom-select">
-                            <select id="proxy" name="proxy">
-                                <option value="ultraviolet">Ultraviolet</option>
-                                <option value="scramjet">Scramjet (brkn)</option>
-                            </select>
-                        </div>
-                    </div>
+        <div class="info-section">
+            <h2>WISP Server</h2>
+            <p>
+                WISP (WebSocket Internet Service Protocol) is used to establish secure connections through the proxy. 
+                The default server is <code>wss://anura.pro/</code> and should work for most users.
+            </p>
+            <p>
+                You can change the wisp server if you know what you're doing or you have your own.
+            </p>
+        </div>
 
-                    <div class="option-group">
-                        <label for="wisp">WISP Server</label>
-                        <input type="text" id="wisp" name="wisp" value="wss://wisp.mercurywork.shop/" placeholder="wss://wisp.mercurywork.shop/">
-                    </div>
-                </div>
+        <div class="info-section">
+            <h2>How to Use</h2>
+            <ul>
+                <li>YOU BETTER KNOW HOW TO USE THIS BUDDY>>></li>
+            </ul>
+        </div>
 
-                <div class="button-wrapper">
-                    <button type="submit">Launch</button>
-                </div>
-            </form>
+        <div class="info-section">
+            <h2>Join the Discord!</h2>
+            <p>
+                Join our Discord community for Support, to chat with the developers, or something else.
+            </p>
         </div>
     </div>
 
-    <div class="footer">
-        <a href="https://discord.gg/N4uCwhJtUJ" target="_blank" rel="noopener noreferrer" title="Join our Discord">
-            <i class="fab fa-discord"></i>
-        </a>
-        <a href="info.html" title="Information">
-            <i class="fas fa-info"></i>
-        </a>
-    </div>
-<script src="js/main.js"></script>
+    <script>
+        // Create dynamic speed lines for the background effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgContainer = document.querySelector('.bg-container');
+            
+            // Create horizontal speed lines
+            for (let i = 0; i < 15; i++) {
+                const speedLine = document.createElement('div');
+                speedLine.classList.add('speed-line');
+                
+                // Randomize position and delay
+                const topPos = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                speedLine.style.top = `${topPos}%`;
+                speedLine.style.animationDelay = `${delay}s`;
+                
+                bgContainer.appendChild(speedLine);
+            }
+            
+            // Create horizontal speed lines going right to left
+            for (let i = 0; i < 15; i++) {
+                const speedLine = document.createElement('div');
+                speedLine.classList.add('speed-line-right');
+                
+                // Randomize position and delay
+                const topPos = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                speedLine.style.top = `${topPos}%`;
+                speedLine.style.animationDelay = `${delay}s`;
+                
+                bgContainer.appendChild(speedLine);
+            }
+            
+            // Create vertical speed lines
+            for (let i = 0; i < 10; i++) {
+                const speedLine = document.createElement('div');
+                speedLine.classList.add('speed-line-vertical');
+                
+                // Randomize position and delay
+                const leftPos = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                speedLine.style.left = `${leftPos}%`;
+                speedLine.style.animationDelay = `${delay}s`;
+                
+                bgContainer.appendChild(speedLine);
+            }
+            
+            // Create vertical speed lines going up
+            for (let i = 0; i < 10; i++) {
+                const speedLine = document.createElement('div');
+                speedLine.classList.add('speed-line-vertical-right');
+                
+                // Randomize position and delay
+                const leftPos = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                speedLine.style.left = `${leftPos}%`;
+                speedLine.style.animationDelay = `${delay}s`;
+                
+                bgContainer.appendChild(speedLine);
+            }
+        });
+    </script>
 </body>
 </html>
